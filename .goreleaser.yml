@@ -37,7 +37,7 @@ archives:
 
 release:
   github:
-    owner: umee-network
+    owner: RafilxTenfen
     name: umee
   name_template: "v{{.Version}}"
 
