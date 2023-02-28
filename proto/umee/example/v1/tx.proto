@@ -1,0 +1,24 @@
+syntax = "proto3";
+package umee.example.v4;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/umee-network/umee/v4/x/example/types";
+
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.messagename_all)     = true;
+
+// Msg defines the x/example module's Msg service.
+service Msg {
+  // Example sends an MsgExample.
+  rpc Example(MsgExample) returns (MsgExampleResponse);
+}
+
+// MsgExample represents a user's request to Example assets to the module.
+message MsgExample {
+  // StrToSave store this string.
+  string str_to_save = 1;
+}
+
+// MsgExampleResponse defines the Msg/Example response type.
+message MsgExampleResponse {}

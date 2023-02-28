@@ -118,6 +118,9 @@ import (
 	appparams "github.com/umee-network/umee/v4/app/params"
 	"github.com/umee-network/umee/v4/swagger"
 	"github.com/umee-network/umee/v4/util/genmap"
+	"github.com/umee-network/umee/v4/x/example"
+	examplekeeper "github.com/umee-network/umee/v4/x/example/keeper"
+	exampletypes "github.com/umee-network/umee/v4/x/example/types"
 	"github.com/umee-network/umee/v4/x/leverage"
 	leveragekeeper "github.com/umee-network/umee/v4/x/leverage/keeper"
 	leveragetypes "github.com/umee-network/umee/v4/x/leverage/types"
@@ -178,6 +181,7 @@ func init() {
 		oracle.AppModuleBasic{},
 		bech32ibc.AppModuleBasic{},
 		uibcmodule.AppModuleBasic{},
+		example.AppModuleBasic{},
 	}
 
 	if Experimental {
@@ -225,6 +229,7 @@ type UmeeApp struct {
 	memKeys map[string]*storetypes.MemoryStoreKey
 
 	// keepers
+	ExampleKeeper    examplekeeper.Keeper
 	AccountKeeper    authkeeper.AccountKeeper
 	BankKeeper       bankkeeper.BaseKeeper
 	CapabilityKeeper *capabilitykeeper.Keeper
@@ -311,7 +316,7 @@ func New(
 		authzkeeper.StoreKey, nftkeeper.StoreKey, group.StoreKey,
 		ibchost.StoreKey, ibctransfertypes.StoreKey, gravitytypes.StoreKey,
 		leveragetypes.StoreKey, oracletypes.StoreKey, bech32ibctypes.StoreKey,
-		uibc.StoreKey,
+		uibc.StoreKey, exampletypes.StoreKey,
 	}
 	if Experimental {
 		storeKeys = append(storeKeys, wasm.StoreKey)
@@ -418,6 +423,8 @@ func New(
 		app.AccountKeeper,
 		groupConfig,
 	)
+
+	app.ExampleKeeper = examplekeeper.NewKeeper(appCodec, keys[exampletypes.StoreKey], app.GetSubspace(exampletypes.ModuleName))
 
 	// set the governance module account as the authority for conducting upgrades
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(
@@ -629,6 +636,8 @@ func New(
 		oracle.NewAppModule(appCodec, app.OracleKeeper, app.AccountKeeper, app.BankKeeper),
 		bech32ibc.NewAppModule(appCodec, app.bech32IbcKeeper),
 		uibcmodule.NewAppModule(appCodec, app.UIbcQuotaKeeper),
+
+		example.NewAppModule(appCodec, app.ExampleKeeper),
 	}
 	if Experimental {
 		appModules = append(

@@ -1,0 +1,13 @@
+syntax = "proto3";
+package umee.example.v4;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/umee-network/umee/v4/x/example/types";
+
+option (gogoproto.goproto_getters_all) = false;
+
+// Params empty.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+}

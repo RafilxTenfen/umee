@@ -1,0 +1,44 @@
+syntax = "proto3";
+package umee.example.v4;
+
+import "google/api/annotations.proto";
+import "umee/example/v1/example.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/umee-network/umee/v4/x/example/types";
+
+option (gogoproto.goproto_getters_all) = false;
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the x/example module.
+  rpc Params(QueryParams) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/umee/example/v1/params";
+  }
+
+  // Example queries one example.
+  rpc Example(QueryExample)
+      returns (QueryExampleResponse) {
+    option (google.api.http).get = "/umee/example/v1/example";
+  }
+}
+
+// QueryParams defines the request structure for the Params gRPC service
+// handler.
+message QueryParams {}
+
+// QueryParamsResponse defines the response structure for the Params gRPC
+// service handler.
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryExample defines the request structure for the QueryExample gRPC service handler.
+message QueryExample {
+  string any_thing = 1;
+}
+
+// QueryExampleResponse defines the response structure for the RegisteredTokens gRPC service handler.
+message QueryExampleResponse {
+  string any_resp = 1;
+}

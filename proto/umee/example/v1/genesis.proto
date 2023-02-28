@@ -1,0 +1,14 @@
+syntax = "proto3";
+package umee.example.v4;
+
+import "umee/example/v1/example.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/umee-network/umee/v4/x/example/types";
+
+option (gogoproto.goproto_getters_all) = false;
+
+// GenesisState defines the x/example module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
